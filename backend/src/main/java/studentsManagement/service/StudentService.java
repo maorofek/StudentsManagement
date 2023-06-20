@@ -12,13 +12,13 @@ import java.util.stream.StreamSupport;
 
 
 @Service
-public class JpaService {
+public class StudentService {
 
-    Logger logger = LoggerFactory.getLogger(JpaService.class);
+    Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentDao studentDao;
 
     @Autowired
-    public JpaService(StudentDao studentDao) {
+    public StudentService(StudentDao studentDao) {
         this.studentDao = studentDao;
     }
 
@@ -41,7 +41,20 @@ public class JpaService {
         return s;
     }
 
+    public boolean deleteStudent(int id) {
+        Student student = getStudentById(id);
+        if (student != null) {
+            studentDao.delete(student);
+            logger.info("Student deleted: " + student.toString());
+            return true;
+        } else {
+            logger.info("Student not found");
+            return false;
+        }
+    }
+
     private Student getStudentById(int id) {
         return studentDao.findById(id).orElse(null);
     }
+
 }

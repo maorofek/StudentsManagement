@@ -28,9 +28,11 @@ public class Student {
     private String email;
 
     @Column(name = "DEPARTMENT")
-    private String department;
+    @Enumerated(EnumType.STRING)
+    private Department department;
 
     @Column(name = "GPA")
     private int gpa;
 
 }
+

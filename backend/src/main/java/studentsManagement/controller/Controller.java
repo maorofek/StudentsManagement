@@ -3,12 +3,9 @@ package studentsManagement.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import studentsManagement.dal.Student;
-import studentsManagement.service.JpaService;
+import studentsManagement.service.StudentService;
 
 import java.util.List;
 
@@ -20,11 +17,11 @@ public class Controller {
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
 
-    private final JpaService jpaService;
+    private final StudentService studentService;
 
     @Autowired
-    public Controller(JpaService jpaService) {
-        this.jpaService = jpaService;
+    public Controller(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @RequestMapping(
@@ -33,7 +30,7 @@ public class Controller {
             produces = APPLICATION_JSON_VALUE
     )
     public List<Student> getStudents() {
-        return jpaService.getAllStudents();
+        return studentService.getAllStudents();
     }
 
     @RequestMapping(
@@ -42,7 +39,7 @@ public class Controller {
             produces = APPLICATION_JSON_VALUE
     )
     public boolean insertStudent(@RequestBody Student student) {
-        return jpaService.insertStudent(student);
+        return studentService.insertStudent(student);
     }
 
     @RequestMapping(
@@ -52,6 +49,16 @@ public class Controller {
             consumes = APPLICATION_JSON_VALUE
     )
     public Student updateStudent(@RequestBody Student student) {
-        return jpaService.updateStudent(student);
+        return studentService.updateStudent(student);
+    }
+
+    //TODO
+    @RequestMapping(
+            method = RequestMethod.DELETE,
+            path = BASE_URL + "/deleteStudent/{id}",
+            produces = APPLICATION_JSON_VALUE
+    )
+    public boolean deleteStudent(@PathVariable int id) {
+        return studentService.deleteStudent(id);
     }
 }
