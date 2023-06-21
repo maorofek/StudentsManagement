@@ -71,9 +71,10 @@ export default function Students() {
   ) => {
     setCurrentStudent(student);
     setIsStudentCreateOpen(true);
+    setIsStudentCreateView(isView);
   };
 
-  const handleStudentCreateClose = (student?: Student) => {
+  const handleStudentCreateClose = () => {
     setCurrentStudent(undefined);
     setIsStudentCreateOpen(false);
   };
@@ -86,7 +87,7 @@ export default function Students() {
       enqueueSnackbar(`הפעולה נכשלה`, { variant: "error" });
     }
   };
-
+  //TODO add icon to new student button ******************************************************
   return (
     <>
       {isStudentCreateOpen ? (
