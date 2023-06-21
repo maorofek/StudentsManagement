@@ -3,26 +3,13 @@ import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { deleteStudent, getStudents } from "../../redux/slices/student";
-import {
-  Card,
-  Table,
-  TableSortLabel,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableContainer,
-  Typography,
-  Button,
-  Toolbar,
-  Icon,
-} from "@mui/material";
+import { Card, Button, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Student } from "../../@types/student";
-import MoreMenu from "../utils/MoreMenu";
 import StudentCreate from "./StudentCreate";
+import TableWithOptions from "../utils/TableWithOptions";
 
-const TABLE_HEAD = [
+const ALL_STUDENTS_TABLE_HEAD = [
   { id: "id", label: "מזהה" },
   { id: "firstName", label: "שם פרטי" },
   { id: "lastName", label: "שם משפחה" },
@@ -108,44 +95,14 @@ export default function Students() {
               סטודנט חדש
             </Button>
           </RootStyle>
-          <TableContainer sx={{ minWidth: 440 }}>
-            <TableHead>
-              <TableRow>
-                {TABLE_HEAD.map((headCell) => (
-                  <TableCell key={headCell.id}>
-                    <TableSortLabel active={false} direction="asc">
-                      {headCell.label}
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {students.map((student: Student) => (
-                <TableRow key={student.id}>
-                  <TableCell>{student.id}</TableCell>
-                  <TableCell>{student.firstName}</TableCell>
-                  <TableCell>{student.lastName}</TableCell>
-                  <TableCell
-                    style={{
-                      textOverflow: "ellipsis",
-                      cursor: "copy",
-                    }}
-                    onClick={() => copy(student.email)}
-                  >
-                    {student.email}
-                  </TableCell>
-                  <TableCell>{student.department}</TableCell>
-                  <TableCell>{student.GPA}</TableCell>
-                  <MoreMenu
-                    onDelete={() => handleStudentDelete(student)}
-                    onEdit={() => handleStudentCreateOpen(student)}
-                    onView={() => handleStudentCreateOpen(student, true)}
-                  />
-                </TableRow>
-              ))}
-            </TableBody>
-          </TableContainer>
+          <TableWithOptions TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD} />
+          {/* make space with a line */}
+          <br />
+          <br />
+          <hr />
+          <br />
+          <br />
+          <TableWithOptions TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD} />
         </Card>
       )}
     </>
