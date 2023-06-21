@@ -3,19 +3,19 @@ import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { deleteStudent, getStudents } from "../../redux/slices/student";
-import { Card, Button, Toolbar } from "@mui/material";
+import { Card, Button, Toolbar, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Student } from "../../@types/student";
 import StudentCreate from "./StudentCreate";
 import TableWithOptions from "../utils/TableWithOptions";
 
 const ALL_STUDENTS_TABLE_HEAD = [
-  { id: "id", label: "מזהה" },
-  { id: "firstName", label: "שם פרטי" },
-  { id: "lastName", label: "שם משפחה" },
-  { id: "email", label: "אימייל" },
-  { id: "department", label: "מחלקה" },
-  { id: "GPA", label: "ממוצע" },
+  { id: "id", label: "id" },
+  { id: "firstName", label: "first name" },
+  { id: "lastName", label: "last name" },
+  { id: "email", label: "email" },
+  { id: "department", label: "department" },
+  { id: "gpa", label: "gpa" },
   { id: "more", label: "" },
 ];
 
@@ -74,7 +74,12 @@ export default function Students() {
       enqueueSnackbar(`הפעולה נכשלה`, { variant: "error" });
     }
   };
-  //TODO add icon to new student button ******************************************************
+
+  const getHonorCandidates = () => {
+    const honorCandidates = students.filter((student) => student.gpa > 90);
+    return honorCandidates;
+  };
+
   return (
     <>
       {isStudentCreateOpen ? (
@@ -85,25 +90,58 @@ export default function Students() {
           isCreateMode={Boolean(isOnlyCreate)}
         />
       ) : (
-        <Card>
-          <RootStyle>
-            <Button
-              variant="contained"
-              type="button"
-              onClick={() => createStudent()}
+        <>
+          <Card>
+            <Stack direction="row" alignItems="left" justifyContent="left">
+              <RootStyle>
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={() => createStudent()}
+                >
+                  add new student
+                </Button>
+                <Typography
+                  sx={{ fontWeight: "bold", ml: 5 }}
+                  variant="h3"
+                  component="h2"
+                >
+                  students list
+                </Typography>
+              </RootStyle>
+            </Stack>
+            <TableWithOptions
+              objects={students}
+              TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD}
+              handleObjectDelete={handleStudentDelete}
+              handleObjectCreateOpen={handleStudentCreateOpen}
+            />
+          </Card>
+          <br />
+          <br />
+          <Card sx={{ pt: 10 }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              marginBottom={7}
             >
-              סטודנט חדש
-            </Button>
-          </RootStyle>
-          <TableWithOptions TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD} />
-          {/* make space with a line */}
-          <br />
-          <br />
-          <hr />
-          <br />
-          <br />
-          <TableWithOptions TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD} />
-        </Card>
+              <Typography
+                sx={{ fontWeight: "bold", ml: 5 }}
+                variant="h3"
+                component="h2"
+              >
+                Excellent students list
+              </Typography>
+            </Stack>
+            <TableWithOptions
+              objects={getHonorCandidates()}
+              TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD}
+              handleObjectDelete={handleStudentDelete}
+              handleObjectCreateOpen={handleStudentCreateOpen}
+            />
+          </Card>
+        </>
       )}
     </>
   );

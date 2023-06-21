@@ -27,23 +27,23 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    public boolean insertStudent(Student student) {
-        studentDao.save(student);
-        logger.info("Student added: " + student.toString());
-        return true;
+    public Student insertStudent(Student student) {
+        Student s = studentDao.save(student);
+        logger.info("Student added: " + s);
+        return s;
     }
 
     public Student updateStudent(Student updatedStudent) {
-        Student student = studentDao.save(updatedStudent);
-        logger.info("Student updated: " + student.toString());
-        return student;
+        studentDao.update(updatedStudent);
+        logger.info("Student updated: " + updatedStudent);
+        return updatedStudent;
     }
 
     public boolean deleteStudent(int id) {
         Student student = getStudentById(id);
         if (student != null) {
             studentDao.delete(student);
-            logger.info("Student deleted: " + student.toString());
+            logger.info("Student deleted: " + student);
             return true;
         } else {
             logger.warn("Student not found");

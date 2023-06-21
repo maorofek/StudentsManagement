@@ -8,7 +8,7 @@ VALUES
 ('Science','e@gmail.com','e',68,'eee'),
 ('Business','f@gmail.com','f',85,'fff'),
 ('Engineering','g@gmail.com','g',97,'ggg'),
-('law','h@gmail.com','h',73,'hhh'),
-('humanities','i@gmail.com','i',79,'iii'),
+('Law','h@gmail.com','h',73,'hhh'),
+('Humanities','i@gmail.com','i',79,'iii'),
 ('Medicine','j@gmail.com','j',86,'jjj')
 

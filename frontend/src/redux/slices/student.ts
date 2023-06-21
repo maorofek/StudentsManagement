@@ -34,10 +34,10 @@ export const studentSlice = createSlice({
         state.students[index] = action.payload;
       }
     },
-    deleteStudentSuccess(state, action: PayloadAction<Student>) {
+    deleteStudentSuccess(state, action: PayloadAction<number>) {
       state.isLoading = false;
       const index = state.students.findIndex(
-        (student: Student) => student.id === action.payload.id
+        (student: Student) => student.id === action.payload
       );
       if (index !== -1) {
         state.students.splice(index, 1);
@@ -75,6 +75,7 @@ export async function insertStudent(dispatch: any, student: Student) {
   dispatch(studentSlice.actions.startLoading());
   try {
     const response = await axios.post(`${BASE_URL}/insertStudent`, student);
+    console.log("[insertStudent] ------> ", response.data);
     if (response.data) {
       dispatch(studentSlice.actions.insertStudentSuccess(response.data));
       return true;
@@ -85,12 +86,26 @@ export async function insertStudent(dispatch: any, student: Student) {
   }
 }
 
+export async function updateStudent(dispatch: any, student: Student) {
+  dispatch(studentSlice.actions.startLoading());
+  console.log(student);
+  try {
+    const response = await axios.put(`${BASE_URL}/updateStudent`, student);
+    if (response.data) {
+      dispatch(studentSlice.actions.updateStudentSuccess(response.data));
+      return true;
+    }
+  } catch (error) {
+    dispatch(studentSlice.actions.hasError(error));
+    console.error(error);
+  }
+}
+
 export async function deleteStudent(dispatch: any, id: number) {
   try {
-    console.log(`/${BASE_URL}/deleteStudent/${id}`);
     const response = await axios.delete(`${BASE_URL}/deleteStudent/${id}`);
     if (response.data) {
-      dispatch(studentSlice.actions.deleteStudentSuccess(response.data));
+      dispatch(studentSlice.actions.deleteStudentSuccess(id));
       return true;
     }
   } catch (error) {
