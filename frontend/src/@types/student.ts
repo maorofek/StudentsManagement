@@ -3,6 +3,6 @@ export type Student = {
   firstName: string;
   lastName: string;
   email: string;
-  GPA: number;
+  gpa: number;
   department: string;
 };

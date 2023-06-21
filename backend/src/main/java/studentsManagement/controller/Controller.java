@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class Controller {
 
-    private Logger logger = LoggerFactory.getLogger(Controller.class);
+    private final Logger logger = LoggerFactory.getLogger(Controller.class);
     public static final String BASE_URL = "/studentsManagement";
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
@@ -38,7 +38,7 @@ public class Controller {
             path = BASE_URL + "/insertStudent",
             produces = APPLICATION_JSON_VALUE
     )
-    public boolean insertStudent(@RequestBody Student student) {
+    public Student insertStudent(@RequestBody Student student) {
         return studentService.insertStudent(student);
     }
 

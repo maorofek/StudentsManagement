@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Student } from "../../@types/student";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
-import { insertStudent } from "../../redux/slices/student";
+import { insertStudent, updateStudent } from "../../redux/slices/student";
 import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import {
@@ -10,21 +10,17 @@ import {
   Stack,
   Card,
   TextField,
-  InputAdornment,
-  IconButton,
-  Icon,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  Typography,
   Button,
   styled,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  OutlinedInput,
 } from "@mui/material";
-import { LoadingButton, MobileTimePicker } from "@mui/lab";
+import { LoadingButton } from "@mui/lab";
+import { Departments } from "../../@types/departments";
 
 const WrapperStyle = styled("div")(({ theme }) => ({
   background: theme.palette.background.default,
@@ -64,7 +60,7 @@ export default function StudentCreate({
     lastName: Yup.string().required("שדה חובה"),
     email: Yup.string().email("כתובת מייל לא תקינה"),
     department: Yup.string(),
-    GPA: Yup.number().min(0).max(100).required("שדה חובה"),
+    gpa: Yup.number().min(0).max(100).required("שדה חובה"),
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -73,21 +69,20 @@ export default function StudentCreate({
       lastName: currentStudent?.lastName || "",
       email: currentStudent?.email || "",
       department: currentStudent?.department || "",
-      GPA: currentStudent?.GPA || 0,
+      gpa: currentStudent?.gpa || 0,
     },
     validationSchema: NewStudentSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
-      setIsLoading(true);
+    onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         const student = {
+          id: currentStudent?.id,
           ...values,
         } as Student;
-
-        //TODO update isn't working !!
-        const status = await insertStudent(dispatch, student);
+        console.log("onSubmit", student);
+        const status = await (isEdit
+          ? updateStudent(dispatch, student)
+          : insertStudent(dispatch, student));
         resetForm();
-        setSubmitting(false);
-        setIsLoading(false);
         if (status) {
           enqueueSnackbar(!isEdit ? "נוצר בהצלחה" : "עודכן בהצלחה", {
             variant: "success",
@@ -98,21 +93,11 @@ export default function StudentCreate({
         handleClose();
       } catch (error: any) {
         console.error(error);
-        setSubmitting(false);
-        setIsLoading(false);
         setErrors(error);
       }
     },
   });
-  const {
-    errors,
-    values,
-    touched,
-    handleSubmit,
-    isSubmitting,
-    setFieldValue,
-    getFieldProps,
-  } = formik;
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
     <WrapperStyle>
@@ -125,57 +110,50 @@ export default function StudentCreate({
                   <Stack spacing={3}>
                     <TextField
                       fullWidth
-                      label="שם פרטי"
+                      label="first name"
                       {...getFieldProps("firstName")}
-                      error={
-                        Boolean(touched.firstName && errors.firstName) ||
-                        !Boolean(values.firstName.length)
-                      }
+                      error={Boolean(touched.firstName && errors.firstName)}
                       helperText={touched.firstName && errors.firstName}
                       disabled={isViewMode}
                     />
                     <TextField
                       fullWidth
-                      label="שם משפחה"
+                      label="last name"
                       {...getFieldProps("lastName")}
-                      error={
-                        Boolean(touched.lastName && errors.lastName) ||
-                        !Boolean(values.lastName.length)
-                      }
+                      error={Boolean(touched.lastName && errors.lastName)}
                       helperText={touched.lastName && errors.lastName}
                       disabled={isViewMode}
                     />
                     <TextField
                       fullWidth
-                      label="אימייל"
+                      label="email"
                       {...getFieldProps("email")}
-                      error={
-                        Boolean(touched.email && errors.email) ||
-                        !Boolean(values.email.length)
-                      }
+                      error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
                       disabled={isViewMode}
                     />
+                    <FormControl fullWidth>
+                      <InputLabel id="departments">departments</InputLabel>
+                      <Select
+                        input={<OutlinedInput label="departments" />}
+                        labelId="departments"
+                        id="departments"
+                        {...getFieldProps("department")}
+                        autoWidth
+                      >
+                        {Departments.map((department) => (
+                          <MenuItem key={department} value={department}>
+                            {department}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                     <TextField
                       fullWidth
-                      label="מחלקה"
-                      {...getFieldProps("department")}
-                      error={
-                        Boolean(touched.department && errors.department) ||
-                        !Boolean(values.department.length)
-                      }
-                      helperText={touched.department && errors.department}
-                      disabled={isViewMode}
-                    />
-                    <TextField
-                      fullWidth
-                      label="ממוצע ציונים"
-                      {...getFieldProps("GPA")}
-                      error={
-                        Boolean(touched.GPA && errors.GPA) ||
-                        !Boolean(values.GPA > 0 && values.GPA < 100)
-                      }
-                      helperText={touched.GPA && errors.GPA}
+                      label="gpa"
+                      {...getFieldProps("gpa")}
+                      error={Boolean(touched.gpa && errors.gpa)}
+                      helperText={touched.gpa && errors.gpa}
                       disabled={isViewMode}
                     />
                   </Stack>
@@ -192,7 +170,7 @@ export default function StudentCreate({
                     size="large"
                     loading={isSubmitting || isLoading}
                   >
-                    {!isEdit ? "הוספה" : "שמור שינויים"}
+                    {!isEdit ? "add" : "update"}
                   </LoadingButton>
                 )}
                 <Button
@@ -203,7 +181,7 @@ export default function StudentCreate({
                   variant="outlined"
                   size="large"
                 >
-                  {isViewMode ? "סגור" : "ביטול"}
+                  {isViewMode ? "close" : "cancel"}
                 </Button>
               </Stack>
             </Grid>
