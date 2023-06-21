@@ -67,19 +67,35 @@ export async function getStudents(dispatch: any) {
     dispatch(studentSlice.actions.getStudentsSuccess(response.data));
   } catch (error) {
     dispatch(studentSlice.actions.hasError(error));
+    console.error(error);
   }
 }
 
-// export async function deleteStudent(id: number): Promise<boolean> {
-//   try {
-//     const response = await axios.delete(`/${BASE_URL}/deleteStudent/${id}`);
-//     if (response.data) {
-//       dispatch(studentSlice.actions.deleteStudentSuccess(response.data));
-//       return true;
-//     }
-//   } catch (error) {
-//     dispatch(studentSlice.actions.hasError(error));
-//     console.error(error);
-//   }
-//   return false;
-// }
+export async function insertStudent(dispatch: any, student: Student) {
+  dispatch(studentSlice.actions.startLoading());
+  try {
+    const response = await axios.post(`${BASE_URL}/insertStudent`, student);
+    if (response.data) {
+      dispatch(studentSlice.actions.insertStudentSuccess(response.data));
+      return true;
+    }
+  } catch (error) {
+    dispatch(studentSlice.actions.hasError(error));
+    console.error(error);
+  }
+}
+
+export async function deleteStudent(dispatch: any, id: number) {
+  try {
+    console.log(`/${BASE_URL}/deleteStudent/${id}`);
+    const response = await axios.delete(`${BASE_URL}/deleteStudent/${id}`);
+    if (response.data) {
+      dispatch(studentSlice.actions.deleteStudentSuccess(response.data));
+      return true;
+    }
+  } catch (error) {
+    dispatch(studentSlice.actions.hasError(error));
+    console.error(error);
+  }
+  return false;
+}

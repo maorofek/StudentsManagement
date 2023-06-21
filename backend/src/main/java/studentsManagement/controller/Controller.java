@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class Controller {
 
-    Logger logger = LoggerFactory.getLogger(Controller.class);
+    private Logger logger = LoggerFactory.getLogger(Controller.class);
     public static final String BASE_URL = "/studentsManagement";
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
@@ -52,7 +52,6 @@ public class Controller {
         return studentService.updateStudent(student);
     }
 
-    //TODO
     @RequestMapping(
             method = RequestMethod.DELETE,
             path = BASE_URL + "/deleteStudent/{id}",

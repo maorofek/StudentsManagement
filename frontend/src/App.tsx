@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React from "react";
 import "./App.css";
-import Students from "./components/Students";
+import Students from "./components/student/Students";
 // import HonorCandidates from "./components/HonorCandidates";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Students />} />
-        {/* <Route path="/shtok" element={<HonorCandidates />} /> */}
+        {/* <Route path="/honorCandidates" element={<HonorCandidates />} /> */}
       </Routes>
     </BrowserRouter>
   );

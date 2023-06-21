@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class StudentService {
 
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentDao studentDao;
 
     @Autowired
@@ -27,18 +27,16 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    //TODO: addStudent returns
     public boolean insertStudent(Student student) {
         studentDao.save(student);
         logger.info("Student added: " + student.toString());
         return true;
     }
 
-    //TODO: addStudent returns
     public Student updateStudent(Student updatedStudent) {
-        Student s = studentDao.save(updatedStudent);
-        logger.info("Student updated: " + s.toString());
-        return s;
+        Student student = studentDao.save(updatedStudent);
+        logger.info("Student updated: " + student.toString());
+        return student;
     }
 
     public boolean deleteStudent(int id) {
@@ -48,7 +46,7 @@ public class StudentService {
             logger.info("Student deleted: " + student.toString());
             return true;
         } else {
-            logger.info("Student not found");
+            logger.warn("Student not found");
             return false;
         }
     }
@@ -56,5 +54,4 @@ public class StudentService {
     private Student getStudentById(int id) {
         return studentDao.findById(id).orElse(null);
     }
-
 }
