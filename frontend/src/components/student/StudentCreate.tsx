@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Departments } from "../../@types/departments";
+import RandomStudentAdder from "./RandomStudentAdder";
 
 const WrapperStyle = styled("div")(({ theme }) => ({
   background: theme.palette.background.default,
@@ -54,11 +55,11 @@ export default function StudentCreate({
   const { enqueueSnackbar } = useSnackbar();
 
   const NewStudentSchema = Yup.object().shape({
-    firstName: Yup.string().required("שדה חובה"),
-    lastName: Yup.string().required("שדה חובה"),
-    email: Yup.string().email("כתובת מייל לא תקינה"),
+    firstName: Yup.string().required("required field"),
+    lastName: Yup.string().required("required field"),
+    email: Yup.string().email("invalid Email"),
     department: Yup.string(),
-    gpa: Yup.number().min(0).max(100).required("שדה חובה"),
+    gpa: Yup.number().min(0).max(100).required("required field"),
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -82,11 +83,14 @@ export default function StudentCreate({
           : insertStudent(dispatch, student));
         resetForm();
         if (status) {
-          enqueueSnackbar(!isEdit ? "נוצר בהצלחה" : "עודכן בהצלחה", {
-            variant: "success",
-          });
+          enqueueSnackbar(
+            !isEdit ? "Created successfully" : "Updated successfully",
+            {
+              variant: "success",
+            }
+          );
         } else {
-          enqueueSnackbar(`הפעולה נכשלה`, { variant: "error" });
+          enqueueSnackbar(`Action failed`, { variant: "error" });
         }
         handleClose();
       } catch (error: any) {
@@ -99,112 +103,96 @@ export default function StudentCreate({
 
   return (
     <WrapperStyle>
-      <FormikProvider value={formik}>
-        <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={3} sx={{ p: 3 }} maxWidth={1200}>
-            <Grid item xs={12} md={8}>
-              <Stack spacing={3}>
-                <Card sx={{ p: 3 }}>
-                  <Stack spacing={3}>
-                    <TextField
-                      fullWidth
-                      label="first name"
-                      {...getFieldProps("firstName")}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
-                      disabled={isViewMode}
-                    />
-                    <TextField
-                      fullWidth
-                      label="last name"
-                      {...getFieldProps("lastName")}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
-                      disabled={isViewMode}
-                    />
-                    <TextField
-                      fullWidth
-                      label="email"
-                      {...getFieldProps("email")}
-                      error={Boolean(touched.email && errors.email)}
-                      helperText={touched.email && errors.email}
-                      disabled={isViewMode}
-                    />
-                    <FormControl fullWidth>
-                      <InputLabel id="departments">departments</InputLabel>
-                      <Select
-                        input={<OutlinedInput label="departments" />}
-                        labelId="departments"
-                        id="departments"
-                        {...getFieldProps("department")}
-                        autoWidth
-                      >
-                        {Departments.map((department) => (
-                          <MenuItem key={department} value={department}>
-                            {department}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <TextField
-                      fullWidth
-                      label="gpa"
-                      {...getFieldProps("gpa")}
-                      error={Boolean(touched.gpa && errors.gpa)}
-                      helperText={touched.gpa && errors.gpa}
-                      disabled={isViewMode}
-                    />
-                  </Stack>
-                </Card>
-              </Stack>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Stack spacing={3}>
-                {!isViewMode && (
-                  <LoadingButton
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    loading={isSubmitting || isLoading}
-                  >
-                    {!isEdit ? "add" : "update"}
-                  </LoadingButton>
-                )}
-                <Button
-                  disabled={isLoading}
-                  onClick={handleClose}
-                  type="button"
-                  fullWidth
-                  variant="outlined"
-                  size="large"
-                >
-                  {isViewMode ? "close" : "cancel"}
-                </Button>
-                <Stack direction="row" justifyContent="flex-start" spacing={5}>
-                  <TextField
-                    id="outlined-basic"
-                    label="Outlined"
-                    variant="outlined"
-                  />
+      <Stack spacing={3} justifyContent="space-between" sx={{ p: 3 }}>
+        <FormikProvider value={formik}>
+          <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <Grid container spacing={3} sx={{ p: 3 }} maxWidth={1200}>
+              <Grid item xs={12} md={8}>
+                <Stack spacing={3}>
+                  <Card sx={{ p: 3 }}>
+                    <Stack spacing={3}>
+                      <TextField
+                        fullWidth
+                        label="first name"
+                        {...getFieldProps("firstName")}
+                        error={Boolean(touched.firstName && errors.firstName)}
+                        helperText={touched.firstName && errors.firstName}
+                        disabled={isViewMode}
+                      />
+                      <TextField
+                        fullWidth
+                        label="last name"
+                        {...getFieldProps("lastName")}
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        helperText={touched.lastName && errors.lastName}
+                        disabled={isViewMode}
+                      />
+                      <TextField
+                        fullWidth
+                        label="email"
+                        {...getFieldProps("email")}
+                        error={Boolean(touched.email && errors.email)}
+                        helperText={touched.email && errors.email}
+                        disabled={isViewMode}
+                      />
+                      <FormControl fullWidth>
+                        <InputLabel id="departments">departments</InputLabel>
+                        <Select
+                          input={<OutlinedInput label="departments" />}
+                          labelId="departments"
+                          id="departments"
+                          {...getFieldProps("department")}
+                          autoWidth
+                        >
+                          {Departments.map((department) => (
+                            <MenuItem key={department} value={department}>
+                              {department}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        fullWidth
+                        label="gpa"
+                        {...getFieldProps("gpa")}
+                        error={Boolean(touched.gpa && errors.gpa)}
+                        helperText={touched.gpa && errors.gpa}
+                        disabled={isViewMode}
+                      />
+                    </Stack>
+                  </Card>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Stack spacing={4}>
                   {!isViewMode && (
                     <LoadingButton
                       type="submit"
+                      fullWidth
                       variant="contained"
-                      color="warning"
-                      size="small"
+                      size="large"
                       loading={isSubmitting || isLoading}
                     >
-                      add random students
                       {!isEdit ? "add" : "update"}
                     </LoadingButton>
                   )}
+                  <Button
+                    disabled={isLoading}
+                    onClick={handleClose}
+                    type="button"
+                    fullWidth
+                    variant="outlined"
+                    size="large"
+                  >
+                    {isViewMode ? "close" : "cancel"}
+                  </Button>
                 </Stack>
-              </Stack>
+              </Grid>
             </Grid>
-          </Grid>
-        </Form>
-      </FormikProvider>
+          </Form>
+        </FormikProvider>
+        <RandomStudentAdder handleClose={handleClose} />
+      </Stack>
     </WrapperStyle>
   );
 }

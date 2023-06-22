@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Card, Stack, Typography, Toolbar, Button } from "@mui/material";
+import { Card, Typography, Toolbar, Button } from "@mui/material";
 import React, { useState } from "react";
 import TableWithOptions from "../utils/TableWithOptions";
 import { styled } from "@mui/material/styles";
@@ -9,9 +9,9 @@ import { Student } from "../../@types/student";
 import { Accessibility, FilterAlt } from "@mui/icons-material";
 
 const TABLE_HEAD = [
-  { id: "email", label: "email" },
-  { id: "department", label: "department" },
-  { id: "gpa", label: "gpa" },
+  { id: "email", label: "Email" },
+  { id: "department", label: "Department" },
+  { id: "gpa", label: "GPA" },
 ];
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -26,6 +26,15 @@ export default function HonorCandidates() {
 
   const { students } = useSelector((state: RootState) => state.student);
 
+  //could also fixed by using getStudents() at higher level than both components
+  if (students.length === 0) {
+    return (
+      <div>
+        <h2>no students loaded</h2>
+        <Link to="/students">Go to Students</Link>
+      </div>
+    );
+  }
   const getHonorCandidates = () => {
     const honorCandidates = students.filter((student) => student.gpa > 90);
     return honorCandidates;
@@ -52,8 +61,15 @@ export default function HonorCandidates() {
   };
   return (
     <>
-      <Card sx={{ width: 1000, height: 600 }}>
-        <Link to="/">
+      <Typography
+        sx={{ fontWeight: "bold", ml: 5 }}
+        variant="h3"
+        component="h2"
+      >
+        Honor Candidates List
+      </Typography>
+      <Card sx={{ width: 1000, height: 650 }}>
+        <Link to="/students">
           <RootStyle>
             <Button
               variant="contained"
@@ -76,17 +92,6 @@ export default function HonorCandidates() {
             Filter Candidates
           </Button>
         </RootStyle>
-        <Stack direction="row" alignItems="left" justifyContent="left">
-          <RootStyle>
-            <Typography
-              sx={{ fontWeight: "bold", ml: 5 }}
-              variant="h3"
-              component="h2"
-            >
-              Honor Candidates list
-            </Typography>
-          </RootStyle>
-        </Stack>
         <TableWithOptions
           objects={
             Object.keys(filteredCandidates).length > 0

@@ -1,17 +1,32 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import React from "react";
 import "./App.css";
 import Students from "./components/student/Students";
 import HonorCandidates from "./components/student/HonorCandidates";
+import { SnackbarProvider } from "notistack";
+import { Link } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Students />} />
-        <Route path="/honorCandidates" element={<HonorCandidates />} />
-      </Routes>
-    </BrowserRouter>
+    <SnackbarProvider anchorOrigin={{ horizontal: "left", vertical: "top" }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/students" />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/honor-candidates" element={<HonorCandidates />} />
+          <Route
+            path="*"
+            element={
+              <div>
+                {" "}
+                <h2>404 Page not found</h2>
+                <Link to="/students">Go to Students</Link>
+              </div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </SnackbarProvider>
   );
 }
 

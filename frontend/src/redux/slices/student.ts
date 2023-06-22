@@ -55,6 +55,10 @@ export const studentSlice = createSlice({
       state.error = action.payload;
       console.error(action.payload);
     },
+    addManyStudentsSuccess(state, action: PayloadAction<Student[]>) {
+      state.isLoading = false;
+      state.students = [...state.students, ...action.payload];
+    },
   },
 });
 
@@ -124,7 +128,7 @@ export async function insertRandomStudents(
       `${BASE_URL}/insertRandomStudents/${numberOfStudents}`
     );
     if (response.data) {
-      dispatch(studentSlice.actions.getStudentsSuccess(response.data));
+      dispatch(studentSlice.actions.addManyStudentsSuccess(response.data));
       return true;
     }
   } catch (error) {

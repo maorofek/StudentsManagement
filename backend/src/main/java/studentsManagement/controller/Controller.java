@@ -62,7 +62,7 @@ public class Controller {
     }
 
     @RequestMapping(
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             path = BASE_URL + "/insertRandomStudents/{amount}",
             produces = APPLICATION_JSON_VALUE
     )

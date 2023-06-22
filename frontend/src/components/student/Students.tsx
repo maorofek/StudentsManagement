@@ -10,14 +10,15 @@ import StudentCreate from "./StudentCreate";
 import TableWithOptions from "../utils/TableWithOptions";
 import { Link } from "react-router-dom";
 import { Add, MilitaryTech } from "@mui/icons-material";
+import StudentFilterer from "./StudentFilterer";
 
 const TABLE_HEAD = [
-  { id: "id", label: "id" },
-  { id: "firstName", label: "first name" },
-  { id: "lastName", label: "last name" },
-  { id: "email", label: "email" },
-  { id: "department", label: "department" },
-  { id: "gpa", label: "gpa" },
+  { id: "id", label: "ID" },
+  { id: "firstName", label: "First Name" },
+  { id: "lastName", label: "Last Name" },
+  { id: "email", label: "Email" },
+  { id: "department", label: "Department" },
+  { id: "gpa", label: "GPA" },
   { id: "more", label: "" },
 ];
 
@@ -40,6 +41,7 @@ export default function Students() {
   const [isStudentCreateView, setIsStudentCreateView] = useState<
     boolean | undefined
   >(false);
+  const [filteredStudents, setFilteredStudents] = useState<any>([]);
 
   useEffect(() => {
     getStudents(dispatch);
@@ -92,8 +94,15 @@ export default function Students() {
           />
         ) : (
           <>
-            <Card sx={{ width: 1000, height: 600 }}>
-              <Link to="/honorCandidates">
+            <Typography
+              sx={{ fontWeight: "bold", ml: 5 }}
+              variant="h3"
+              component="h2"
+            >
+              Students List
+            </Typography>
+            <Card sx={{ width: 1000, height: 650 }}>
+              <Link to="/honor-candidates">
                 <RootStyle>
                   <Button
                     variant="contained"
@@ -116,46 +125,38 @@ export default function Students() {
                   >
                     add new student
                   </Button>
-                  <Typography
-                    sx={{ fontWeight: "bold", ml: 5 }}
-                    variant="h3"
-                    component="h2"
-                  >
-                    students list
-                  </Typography>
                 </RootStyle>
               </Stack>
+              <StudentFilterer
+                students={students}
+                setFilteredStudents={setFilteredStudents}
+              />
               <TableWithOptions
-                objects={students}
+                objects={filteredStudents}
                 TABLE_HEAD={TABLE_HEAD}
                 handleObjectDelete={handleStudentDelete}
                 handleObjectCreateOpen={handleStudentCreateOpen}
               />
             </Card>
-            <br />
-            <br />
-            <Card sx={{ pt: 10 }}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                marginBottom={7}
+            <Stack alignItems="left" justifyContent="left" sx={{ mt: 10 }}>
+              <Typography
+                sx={{ fontWeight: "bold", ml: 5 }}
+                variant="h3"
+                component="h2"
               >
-                <Typography
-                  sx={{ fontWeight: "bold", ml: 5 }}
-                  variant="h3"
-                  component="h2"
-                >
-                  Excellent students list
-                </Typography>
-              </Stack>
-              <TableWithOptions
-                objects={getHonorCandidates()}
-                TABLE_HEAD={TABLE_HEAD}
-                handleObjectDelete={handleStudentDelete}
-                handleObjectCreateOpen={handleStudentCreateOpen}
-              />
-            </Card>
+                Excellent Students List
+              </Typography>
+              <Card sx={{ pt: 10 }}>
+                <TableWithOptions
+                  objects={getHonorCandidates()}
+                  TABLE_HEAD={TABLE_HEAD}
+                  handleObjectDelete={handleStudentDelete}
+                  handleObjectCreateOpen={handleStudentCreateOpen}
+                  defultFieldSort={"gpa"}
+                  orderDir={"desc"}
+                />
+              </Card>
+            </Stack>
           </>
         )}
       </div>

@@ -20,14 +20,19 @@ export default function TableWithOptions({
   TABLE_HEAD,
   handleObjectCreateOpen,
   handleObjectDelete,
+  defultFieldSort,
+  orderDir,
 }: {
   objects: any[];
   TABLE_HEAD: any;
   handleObjectCreateOpen?: Function;
   handleObjectDelete?: Function;
+  defultFieldSort?: string;
+  orderDir?: "asc" | "desc";
 }) {
-  const [orderBy, setOrderBy] = useState("name");
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  if (!orderDir) orderDir = "asc";
+  const [orderBy, setOrderBy] = useState(defultFieldSort || "id");
+  const [order, setOrder] = useState<"asc" | "desc">(orderDir);
 
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === "asc";
@@ -51,8 +56,9 @@ export default function TableWithOptions({
 
     return sortedArray;
   }, [objects, orderBy, order]);
+
   return (
-    <TableContainer sx={{ minWidth: 440, maxHeight: 500 }}>
+    <TableContainer sx={{ maxHeight: 500, overflow: "auto" }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -69,7 +75,7 @@ export default function TableWithOptions({
                     handleRequestSort(headCell.id);
                   }}
                 >
-                  {headCell.label}
+                  <b>{headCell.label}</b>
                   {orderBy === headCell.id ? (
                     <Box sx={{ ...visuallyHidden }}>
                       {order === "desc"
