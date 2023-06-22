@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { Student } from "../../@types/student";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
@@ -13,7 +13,6 @@ import {
   Button,
   styled,
   Select,
-  SelectChangeEvent,
   MenuItem,
   InputLabel,
   FormControl,
@@ -48,9 +47,8 @@ export default function StudentCreate({
   handleClose,
   currentStudent,
   isViewMode,
-  isCreateMode,
 }: StudentCreateProps) {
-  const [isLoading, setIsLoading] = useState<boolean>();
+  const [isLoading] = useState<boolean>();
   const isEdit = Boolean(currentStudent);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();

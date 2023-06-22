@@ -20,9 +20,10 @@ export default function TableWithOptions({
 }: {
   objects: any[];
   TABLE_HEAD: any;
-  handleObjectCreateOpen: Function;
-  handleObjectDelete: Function;
+  handleObjectCreateOpen?: Function;
+  handleObjectDelete?: Function;
 }) {
+  console.log("objects", objects);
   return (
     <TableContainer sx={{ minWidth: 440, maxHeight: 500 }}>
       <Table>
@@ -47,13 +48,15 @@ export default function TableWithOptions({
                   {obj[headCell.id]}
                 </TableCell>
               ))}
-              <TableCell>
-                <MoreMenu
-                  onDelete={() => handleObjectDelete(obj)}
-                  onEdit={() => handleObjectCreateOpen(obj)}
-                  onView={() => handleObjectCreateOpen(obj, true)}
-                />
-              </TableCell>
+              {handleObjectCreateOpen && handleObjectDelete && (
+                <TableCell>
+                  <MoreMenu
+                    onDelete={() => handleObjectDelete(obj)}
+                    onEdit={() => handleObjectCreateOpen(obj)}
+                    onView={() => handleObjectCreateOpen(obj, true)}
+                  />
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

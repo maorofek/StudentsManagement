@@ -8,8 +8,9 @@ import { styled } from "@mui/material/styles";
 import { Student } from "../../@types/student";
 import StudentCreate from "./StudentCreate";
 import TableWithOptions from "../utils/TableWithOptions";
+import { Link } from "react-router-dom";
 
-const ALL_STUDENTS_TABLE_HEAD = [
+const TABLE_HEAD = [
   { id: "id", label: "id" },
   { id: "firstName", label: "first name" },
   { id: "lastName", label: "last name" },
@@ -30,7 +31,7 @@ export default function Students() {
   const { enqueueSnackbar } = useSnackbar();
   const { students } = useSelector((state: RootState) => state.student);
   const dispatch = useDispatch();
-  const [isOnlyCreate, setIsOnlyCreate] = useState<boolean | undefined>(false);
+  const [isOnlyCreate] = useState<boolean | undefined>(false);
   const [currentStudent, setCurrentStudent] = useState<Student | undefined>();
   const [isStudentCreateOpen, setIsStudentCreateOpen] = useState<
     boolean | undefined
@@ -38,16 +39,12 @@ export default function Students() {
   const [isStudentCreateView, setIsStudentCreateView] = useState<
     boolean | undefined
   >(false);
-  const copy = (text: string) => {
-    navigator.clipboard.writeText(text);
-    enqueueSnackbar(`הטוקן הועתק בהצלחה`, { variant: "info" });
-  };
 
   useEffect(() => {
     getStudents(dispatch);
   }, [dispatch]);
 
-  const createStudent = async (student?: Student, isView?: boolean) => {
+  const createStudent = async (isView?: boolean) => {
     setIsStudentCreateOpen(true);
     setIsStudentCreateView(isView);
   };
@@ -69,9 +66,11 @@ export default function Students() {
   const handleStudentDelete = async (student: Student) => {
     const status = await deleteStudent(dispatch, student.id);
     if (status) {
-      enqueueSnackbar("הפעולה בוצעה בהצלחה", { variant: "success" });
+      enqueueSnackbar("transaction completed successfully", {
+        variant: "success",
+      });
     } else {
-      enqueueSnackbar(`הפעולה נכשלה`, { variant: "error" });
+      enqueueSnackbar(`transaction failed`, { variant: "error" });
     }
   };
 
@@ -92,11 +91,19 @@ export default function Students() {
       ) : (
         <>
           <Card>
+            <Link to="/honorCandidates">
+              <RootStyle>
+                <Button variant="contained" type="button" color="warning">
+                  Honor Candidates
+                </Button>
+              </RootStyle>
+            </Link>
             <Stack direction="row" alignItems="left" justifyContent="left">
               <RootStyle>
                 <Button
                   variant="contained"
                   type="button"
+                  color="success"
                   onClick={() => createStudent()}
                 >
                   add new student
@@ -112,7 +119,7 @@ export default function Students() {
             </Stack>
             <TableWithOptions
               objects={students}
-              TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD}
+              TABLE_HEAD={TABLE_HEAD}
               handleObjectDelete={handleStudentDelete}
               handleObjectCreateOpen={handleStudentCreateOpen}
             />
@@ -136,7 +143,7 @@ export default function Students() {
             </Stack>
             <TableWithOptions
               objects={getHonorCandidates()}
-              TABLE_HEAD={ALL_STUDENTS_TABLE_HEAD}
+              TABLE_HEAD={TABLE_HEAD}
               handleObjectDelete={handleStudentDelete}
               handleObjectCreateOpen={handleStudentCreateOpen}
             />
