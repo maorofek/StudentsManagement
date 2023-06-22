@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public class StudentGenerator {
-    static final private int MIN_GPA = 0;
+    static final private int MIN_GPA = 75;
     static final private int MAX_GPA = 100;
     private static final String[] FIRST_NAMES = {
             "Liam", "Emma", "Noah", "Olivia", "William", "Ava", "James", "Isabella", "Oliver", "Sophia", "Benjamin", "Mia", "Elijah", "Charlotte", "Lucas", "Amelia", "Mason", "Harper", "Logan", "Evelyn",
