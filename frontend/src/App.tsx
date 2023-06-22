@@ -3,7 +3,6 @@ import React from "react";
 import "./App.css";
 import Students from "./components/student/Students";
 import HonorCandidates from "./components/student/HonorCandidates";
-// import HonorCandidates from "./components/HonorCandidates";
 
 function App() {
   return (

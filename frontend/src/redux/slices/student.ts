@@ -114,3 +114,22 @@ export async function deleteStudent(dispatch: any, id: number) {
   }
   return false;
 }
+
+export async function insertRandomStudents(
+  dispatch: any,
+  numberOfStudents: number
+) {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/insertRandomStudents/${numberOfStudents}`
+    );
+    if (response.data) {
+      dispatch(studentSlice.actions.getStudentsSuccess(response.data));
+      return true;
+    }
+  } catch (error) {
+    dispatch(studentSlice.actions.hasError(error));
+    console.error(error);
+  }
+  return false;
+}

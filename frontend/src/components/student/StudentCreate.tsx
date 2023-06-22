@@ -181,6 +181,25 @@ export default function StudentCreate({
                 >
                   {isViewMode ? "close" : "cancel"}
                 </Button>
+                <Stack direction="row" justifyContent="flex-start" spacing={5}>
+                  <TextField
+                    id="outlined-basic"
+                    label="Outlined"
+                    variant="outlined"
+                  />
+                  {!isViewMode && (
+                    <LoadingButton
+                      type="submit"
+                      variant="contained"
+                      color="warning"
+                      size="small"
+                      loading={isSubmitting || isLoading}
+                    >
+                      add random students
+                      {!isEdit ? "add" : "update"}
+                    </LoadingButton>
+                  )}
+                </Stack>
               </Stack>
             </Grid>
           </Grid>

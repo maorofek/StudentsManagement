@@ -60,4 +60,13 @@ public class Controller {
     public boolean deleteStudent(@PathVariable int id) {
         return studentService.deleteStudent(id);
     }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = BASE_URL + "/insertRandomStudents/{amount}",
+            produces = APPLICATION_JSON_VALUE
+    )
+    public List<Student> insertRandomStudents(@PathVariable int amount) {
+        return studentService.insertRandomStudents(amount);
+    }
 }

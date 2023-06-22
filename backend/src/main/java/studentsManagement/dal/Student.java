@@ -33,5 +33,6 @@ public class Student {
 
     @Column(name = "GPA")
     private int gpa;
+
 }
 

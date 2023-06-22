@@ -9,6 +9,7 @@ import { Student } from "../../@types/student";
 import StudentCreate from "./StudentCreate";
 import TableWithOptions from "../utils/TableWithOptions";
 import { Link } from "react-router-dom";
+import { Add, MilitaryTech } from "@mui/icons-material";
 
 const TABLE_HEAD = [
   { id: "id", label: "id" },
@@ -21,7 +22,7 @@ const TABLE_HEAD = [
 ];
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
-  height: 96,
+  height: 20,
   display: "flex",
   justifyContent: "space-between",
   padding: theme.spacing(0, 0, 0, 1),
@@ -81,75 +82,83 @@ export default function Students() {
 
   return (
     <>
-      {isStudentCreateOpen ? (
-        <StudentCreate
-          handleClose={handleStudentCreateClose}
-          currentStudent={currentStudent}
-          isViewMode={Boolean(isStudentCreateView)}
-          isCreateMode={Boolean(isOnlyCreate)}
-        />
-      ) : (
-        <>
-          <Card>
-            <Link to="/honorCandidates">
-              <RootStyle>
-                <Button variant="contained" type="button" color="warning">
-                  Honor Candidates
-                </Button>
-              </RootStyle>
-            </Link>
-            <Stack direction="row" alignItems="left" justifyContent="left">
-              <RootStyle>
-                <Button
-                  variant="contained"
-                  type="button"
-                  color="success"
-                  onClick={() => createStudent()}
-                >
-                  add new student
-                </Button>
+      <div className="background-container">
+        {isStudentCreateOpen ? (
+          <StudentCreate
+            handleClose={handleStudentCreateClose}
+            currentStudent={currentStudent}
+            isViewMode={Boolean(isStudentCreateView)}
+            isCreateMode={Boolean(isOnlyCreate)}
+          />
+        ) : (
+          <>
+            <Card sx={{ width: 1000, height: 600 }}>
+              <Link to="/honorCandidates">
+                <RootStyle>
+                  <Button
+                    variant="contained"
+                    type="button"
+                    color="warning"
+                    startIcon={<MilitaryTech />}
+                  >
+                    Honor Candidates
+                  </Button>
+                </RootStyle>
+              </Link>
+              <Stack direction="row" alignItems="left" justifyContent="left">
+                <RootStyle>
+                  <Button
+                    variant="contained"
+                    type="button"
+                    color="success"
+                    onClick={() => createStudent()}
+                    startIcon={<Add />}
+                  >
+                    add new student
+                  </Button>
+                  <Typography
+                    sx={{ fontWeight: "bold", ml: 5 }}
+                    variant="h3"
+                    component="h2"
+                  >
+                    students list
+                  </Typography>
+                </RootStyle>
+              </Stack>
+              <TableWithOptions
+                objects={students}
+                TABLE_HEAD={TABLE_HEAD}
+                handleObjectDelete={handleStudentDelete}
+                handleObjectCreateOpen={handleStudentCreateOpen}
+              />
+            </Card>
+            <br />
+            <br />
+            <Card sx={{ pt: 10 }}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                marginBottom={7}
+              >
                 <Typography
                   sx={{ fontWeight: "bold", ml: 5 }}
                   variant="h3"
                   component="h2"
                 >
-                  students list
+                  Excellent students list
                 </Typography>
-              </RootStyle>
-            </Stack>
-            <TableWithOptions
-              objects={students}
-              TABLE_HEAD={TABLE_HEAD}
-              handleObjectDelete={handleStudentDelete}
-              handleObjectCreateOpen={handleStudentCreateOpen}
-            />
-          </Card>
-          <br />
-          <br />
-          <Card sx={{ pt: 10 }}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              marginBottom={7}
-            >
-              <Typography
-                sx={{ fontWeight: "bold", ml: 5 }}
-                variant="h3"
-                component="h2"
-              >
-                Excellent students list
-              </Typography>
-            </Stack>
-            <TableWithOptions
-              objects={getHonorCandidates()}
-              TABLE_HEAD={TABLE_HEAD}
-              handleObjectDelete={handleStudentDelete}
-              handleObjectCreateOpen={handleStudentCreateOpen}
-            />
-          </Card>
-        </>
-      )}
+              </Stack>
+              <TableWithOptions
+                objects={getHonorCandidates()}
+                TABLE_HEAD={TABLE_HEAD}
+                handleObjectDelete={handleStudentDelete}
+                handleObjectCreateOpen={handleStudentCreateOpen}
+              />
+            </Card>
+          </>
+        )}
+      </div>
     </>
   );
 }

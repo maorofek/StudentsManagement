@@ -1,10 +1,12 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Card, Stack, Typography, Toolbar, Button } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import TableWithOptions from "../utils/TableWithOptions";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { Student } from "../../@types/student";
+import { Accessibility, FilterAlt } from "@mui/icons-material";
 
 const TABLE_HEAD = [
   { id: "email", label: "email" },
@@ -13,13 +15,15 @@ const TABLE_HEAD = [
 ];
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
-  height: 96,
+  height: 20,
   display: "flex",
   justifyContent: "space-between",
   padding: theme.spacing(0, 0, 0, 1),
 }));
 
 export default function HonorCandidates() {
+  const [filteredCandidates, setFilteredCandidates] = useState<any>([]);
+
   const { students } = useSelector((state: RootState) => state.student);
 
   const getHonorCandidates = () => {
@@ -27,17 +31,37 @@ export default function HonorCandidates() {
     return honorCandidates;
   };
 
-  function filterCandidates() {
-    throw new Error("Function not implemented.");
-  }
+  const maxByDept = (students: Student[]) =>
+    students.reduce((acc: Student[], student: Student) => {
+      const existingStudent = acc.find(
+        (s) => s.department === student.department
+      );
+      if (!existingStudent || existingStudent.gpa < student.gpa) {
+        if (existingStudent) {
+          const index = acc.indexOf(existingStudent);
+          acc.splice(index, 1);
+        }
+        acc.push(student);
+      }
+      return acc;
+    }, []);
 
+  const handleFilterCandidates = () => {
+    const filteredCandidates = maxByDept(getHonorCandidates());
+    setFilteredCandidates(filteredCandidates);
+  };
   return (
     <>
-      <Card>
+      <Card sx={{ width: 1000, height: 600 }}>
         <Link to="/">
           <RootStyle>
-            <Button variant="contained" type="button" color="warning">
-              students
+            <Button
+              variant="contained"
+              type="button"
+              color="warning"
+              startIcon={<Accessibility />}
+            >
+              back to students
             </Button>
           </RootStyle>
         </Link>
@@ -46,9 +70,8 @@ export default function HonorCandidates() {
             variant="contained"
             type="button"
             color="primary"
-            onClick={() => {
-              filterCandidates();
-            }}
+            startIcon={<FilterAlt />}
+            onClick={handleFilterCandidates}
           >
             Filter Candidates
           </Button>
@@ -65,7 +88,11 @@ export default function HonorCandidates() {
           </RootStyle>
         </Stack>
         <TableWithOptions
-          objects={getHonorCandidates()}
+          objects={
+            Object.keys(filteredCandidates).length > 0
+              ? filteredCandidates
+              : getHonorCandidates()
+          }
           TABLE_HEAD={TABLE_HEAD}
         />
       </Card>
