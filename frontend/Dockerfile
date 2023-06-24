@@ -12,4 +12,4 @@ RUN yarn build
 
 EXPOSE 5173
 
-CMD ["npx", "serve", "-s", "build", "-l", "5173"]
+CMD ["npx", "serve", "-s", "dist", "-l", "5173"]
