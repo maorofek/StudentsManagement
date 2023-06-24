@@ -9,8 +9,10 @@ import { LoadingButton } from "@mui/lab";
 
 export default function RandomStudentAdder({
   handleClose,
+  isViewMode,
 }: {
   handleClose: VoidFunction;
+  isViewMode: boolean;
 }) {
   const dispatch = useDispatch();
   const isLoading = useSelector((state: any) => state.student.isLoading);
@@ -48,31 +50,37 @@ export default function RandomStudentAdder({
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <FormikProvider value={formik}>
-      <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Card sx={{ p: 3 }}>
-          <Stack direction="row" spacing={2}>
-            <TextField
-              fullWidth
-              label="Number of students"
-              {...getFieldProps("numberOfStudents")}
-              error={Boolean(
-                touched.numberOfStudents && errors.numberOfStudents
-              )}
-              helperText={touched.numberOfStudents && errors.numberOfStudents}
-            />
-            <LoadingButton
-              type="submit"
-              variant="contained"
-              color="warning"
-              size="small"
-              loading={isSubmitting || isLoading}
-            >
-              add random students
-            </LoadingButton>
-          </Stack>
-        </Card>
-      </Form>
-    </FormikProvider>
+    <>
+      {!isViewMode && (
+        <FormikProvider value={formik}>
+          <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <Card sx={{ p: 3, ml: -82 }}>
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  fullWidth
+                  label="Number of students"
+                  {...getFieldProps("numberOfStudents")}
+                  error={Boolean(
+                    touched.numberOfStudents && errors.numberOfStudents
+                  )}
+                  helperText={
+                    touched.numberOfStudents && errors.numberOfStudents
+                  }
+                />
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  color="warning"
+                  size="small"
+                  loading={isSubmitting || isLoading}
+                >
+                  add random students
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Form>
+        </FormikProvider>
+      )}
+    </>
   );
 }

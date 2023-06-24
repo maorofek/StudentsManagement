@@ -142,6 +142,7 @@ export default function StudentCreate({
                           input={<OutlinedInput label="departments" />}
                           labelId="departments"
                           id="departments"
+                          disabled={isViewMode}
                           {...getFieldProps("department")}
                           autoWidth
                         >
@@ -193,7 +194,7 @@ export default function StudentCreate({
           </Form>
         </FormikProvider>
         <Divider />
-        <RandomStudentAdder handleClose={handleClose} />
+        <RandomStudentAdder handleClose={handleClose} isViewMode={isEdit} />
       </Stack>
     </WrapperStyle>
   );

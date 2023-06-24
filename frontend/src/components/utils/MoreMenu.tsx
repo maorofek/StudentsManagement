@@ -67,7 +67,7 @@ export default function MoreMenu({
                 <Icon icon={eyeOutline} width={24} height={24} />
               </ListItemIcon>
               <ListItemText
-                primary="צפייה"
+                primary="view"
                 primaryTypographyProps={{ variant: "body2" }}
               />
             </MenuItem>
@@ -84,7 +84,7 @@ export default function MoreMenu({
                 <Icon icon={editFill} width={24} height={24} />
               </ListItemIcon>
               <ListItemText
-                primary="עריכה"
+                primary="edit"
                 primaryTypographyProps={{ variant: "body2" }}
               />
             </MenuItem>
@@ -101,7 +101,7 @@ export default function MoreMenu({
                 <Icon icon={trash2Outline} width={24} height={24} />
               </ListItemIcon>
               <ListItemText
-                primary={deleteText ? deleteText : "מחיקה"}
+                primary={deleteText ? deleteText : "delete"}
                 primaryTypographyProps={{ variant: "body2" }}
               />
             </MenuItem>
