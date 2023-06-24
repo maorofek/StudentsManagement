@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Student } from "../../@types/student";
 import * as Yup from "yup";
 import { Form, FormikProvider, useFormik } from "formik";
 import { insertStudent, updateStudent } from "../../redux/slices/student";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import {
   Grid,
@@ -17,6 +17,7 @@ import {
   InputLabel,
   FormControl,
   OutlinedInput,
+  Divider,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Departments } from "../../@types/departments";
@@ -44,23 +45,24 @@ interface StudentCreateProps {
   isCreateMode: boolean;
 }
 
+const NewStudentSchema = Yup.object().shape({
+  firstName: Yup.string().required("Required field"),
+  lastName: Yup.string().required("Required field"),
+  email: Yup.string().email("Invalid Email"),
+  department: Yup.string().required("Required field"),
+  gpa: Yup.number().min(0).max(100).required("Required field"),
+});
+
 export default function StudentCreate({
   handleClose,
   currentStudent,
   isViewMode,
 }: StudentCreateProps) {
-  const [isLoading] = useState<boolean>();
   const isEdit = Boolean(currentStudent);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const isLoading = useSelector((state: any) => state.student.isLoading);
 
-  const NewStudentSchema = Yup.object().shape({
-    firstName: Yup.string().required("required field"),
-    lastName: Yup.string().required("required field"),
-    email: Yup.string().email("invalid Email"),
-    department: Yup.string(),
-    gpa: Yup.number().min(0).max(100).required("required field"),
-  });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -77,7 +79,6 @@ export default function StudentCreate({
           id: currentStudent?.id,
           ...values,
         } as Student;
-        console.log("onSubmit", student);
         const status = await (isEdit
           ? updateStudent(dispatch, student)
           : insertStudent(dispatch, student));
@@ -113,7 +114,7 @@ export default function StudentCreate({
                     <Stack spacing={3}>
                       <TextField
                         fullWidth
-                        label="first name"
+                        label="First Name"
                         {...getFieldProps("firstName")}
                         error={Boolean(touched.firstName && errors.firstName)}
                         helperText={touched.firstName && errors.firstName}
@@ -121,7 +122,7 @@ export default function StudentCreate({
                       />
                       <TextField
                         fullWidth
-                        label="last name"
+                        label="Last Name"
                         {...getFieldProps("lastName")}
                         error={Boolean(touched.lastName && errors.lastName)}
                         helperText={touched.lastName && errors.lastName}
@@ -129,14 +130,14 @@ export default function StudentCreate({
                       />
                       <TextField
                         fullWidth
-                        label="email"
+                        label="Email"
                         {...getFieldProps("email")}
                         error={Boolean(touched.email && errors.email)}
                         helperText={touched.email && errors.email}
                         disabled={isViewMode}
                       />
                       <FormControl fullWidth>
-                        <InputLabel id="departments">departments</InputLabel>
+                        <InputLabel id="departments">Departments</InputLabel>
                         <Select
                           input={<OutlinedInput label="departments" />}
                           labelId="departments"
@@ -153,7 +154,7 @@ export default function StudentCreate({
                       </FormControl>
                       <TextField
                         fullWidth
-                        label="gpa"
+                        label="GPA"
                         {...getFieldProps("gpa")}
                         error={Boolean(touched.gpa && errors.gpa)}
                         helperText={touched.gpa && errors.gpa}
@@ -191,6 +192,7 @@ export default function StudentCreate({
             </Grid>
           </Form>
         </FormikProvider>
+        <Divider />
         <RandomStudentAdder handleClose={handleClose} />
       </Stack>
     </WrapperStyle>

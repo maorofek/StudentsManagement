@@ -57,20 +57,20 @@ export default function StudentFilterer({
       <TextField
         fullWidth
         value={filters.firstName}
-        label="filter by first name"
+        label="Filter by First Name"
         onChange={(e) => handleFilterChange("firstName", e.target.value)}
       />
       <TextField
         fullWidth
         value={filters.lastName}
-        label="filter by last name"
+        label="Filter by Last Name"
         onChange={(e) => handleFilterChange("lastName", e.target.value)}
       />
       <TextField
         fullWidth
         select
         value={filters.department}
-        label="filter by department"
+        label="Filter by Department"
         onChange={(e) => handleFilterChange("department", e.target.value)}
         SelectProps={{ native: true }}
       >

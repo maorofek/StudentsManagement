@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Student } from "../../@types/student";
 import axios from "../../utils/axios";
-// import { dispatch } from "../store";
 
 const BASE_URL = "/studentsManagement";
 

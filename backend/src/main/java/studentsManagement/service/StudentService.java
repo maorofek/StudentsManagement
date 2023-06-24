@@ -1,11 +1,13 @@
 package studentsManagement.service;
 
+import jakarta.persistence.Cacheable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import studentsManagement.dal.Student;
 import studentsManagement.dal.StudentDao;
 import studentsManagement.utils.StudentGenerator;
