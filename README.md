@@ -13,6 +13,8 @@ By Maor Ofek
 - vite
 - MUI
 - Redux Toolkit
+- Formik
+- Yup
 
 #### DB:
 - MySQL
